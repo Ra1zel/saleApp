@@ -1,66 +1,235 @@
 import Paper from "@mui/material/Paper";
-import {FormLabel, styled} from "@mui/material";
+import {FormLabel} from "@mui/material";
+import {styled} from "@mui/material/styles"
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import {Container} from "../components/UtilityComponents/Utilities.tsx"
-import Box from "@mui/material/Box"
-import {SubmitHandler, useForm} from "react-hook-form";
+import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {z} from "zod"
+import {zodResolver} from "@hookform/resolvers/zod";
+import Typography from "@mui/material/Typography";
 
-const MyBox = styled(Box)(() => ({
-  fontSize: "10px"
-}))
-type AddProductFields = {
-  productTitle: string,
-  productPrice: number,
-  productDescription: string,
-  productImage: FileList
-}
 
-const AddProductFormFields = z.object({
-  productTitle: z.string(),
-  productPrice: z.number().positive().int(),
-  productDescription: z.string().max(250),
-  productImage: z
+const CenterHorizontallyAndVertically = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin-top: -80px;
+`
+const Center = styled('div')`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`
+const StyledTextField = styled(TextField)`
+  & .MuiInputBase-input {
+    font-size: 14px;
+    padding: 8px;
+    width: 350px;
+  }
 
-})
+  & .MuiInputBase-root {
+    padding: 0;
+  }
+
+  && {
+    margin-bottom: 0;
+  }
+`
+const FormRowContainer = styled('div')`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 10px;
+`
+const CustomFilePicker = styled(TextField)`
+  & .MuiInputBase-input {
+    font-size: 14px;
+    padding: 8px;
+    width: 245px;
+    border: 1px solid rgba(0, 0, 0, 0);
+  }
+
+  && {
+    margin: 0;
+  }
+
+  //position: absolute;
+  left: -100px;
+  z-index: 1;
+`
+const CustomFilePickerLabel = styled('label')`
+  margin-top: 4.5px;
+  margin-left: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.19);
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  z-index: 2;
+  background-color: white;
+  padding: 8px 10px 5px 10px;
+`
+const FilePickerWrapper = styled('div')`
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  margin-bottom: 25px;
+  border: 1px solid transparent;
+
+  //:hover {
+  //  border: 1px solid rgba(0, 0, 0, .97);
+  //  border-right: none;
+  //}
+`
+
+
+const addProductFields = z.object({
+  productTitle: z.string({
+    required_error: "This field is required.",
+    invalid_type_error: "Product title must be a string."
+  }).min(5).max(50),
+  productPrice: z.number({
+    required_error: "This field is required.",
+    invalid_type_error: "Product price must be an Number."
+  }).min(1, "Price cannot be 0.").positive("Price cannot be a negative number.").int("Price must be an Integer."),
+  productDescription: z.string({
+    required_error: "This field is required.",
+    invalid_type_error: "Product Description must be a string."
+  }).min(50, "Product description cannot be less than 50 characters.").max(250, "Product description cannot exceed 250 characters."),
+  productImage: z.any().refine((file: File) => {
+    const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/svg+xml"];
+    return ACCEPTED_IMAGE_TYPES.includes(file?.type)
+  }, "Invalid image.").refine((file: File) => {
+    const uploadedImg = new Image()
+    if (!file) {
+      return false
+    }
+    return new Promise((resolve) => {
+      uploadedImg.onload = function () {
+        const width = uploadedImg.naturalWidth
+        const height = uploadedImg.naturalHeight
+        window.URL.revokeObjectURL(uploadedImg.src)
+        if (width <= 200 && height <= 200) {
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+      }
+      uploadedImg.src = window.URL.createObjectURL(file)
+    })
+  }, "Image dimensions must be less than 200x200.")
+}).required()
+type AddProductFields = z.infer<typeof addProductFields>
+
 
 const AddProductPage = () => {
   const {
-    register,
-    resetField,
     handleSubmit,
-    watch
-  } = useForm<AddProductFields>()
+    reset,
+    control,
+  } = useForm<AddProductFields>({
+    resolver: zodResolver(addProductFields)
+  })
 
-  console.log(watch("productTitle"))
-  console.log(watch("productPrice"))
-  console.log(watch("productDescription"))
-  console.log(watch("productImage"))
   const addProductFormSubmitHandler: SubmitHandler<AddProductFields> = (data) => {
-    console.log(data.productImage[0])
-    resetField("productTitle")
-    resetField("productPrice")
-    resetField("productDescription")
-    resetField("productImage")
+    console.log(data)
+    reset({productTitle: "", productPrice: "", productDescription: "", productImage: ""})
   }
   return (
-    <MyBox>
-      <Container>
-        <Paper sx={{display: "flex", flexDirection: "column", width: "450px", padding: "15px"}}>
+    <CenterHorizontallyAndVertically>
+      <Paper sx={{display: "flex", flexDirection: "column", width: "450px", padding: "15px"}}>
+        <Center>
+          <Typography variant={"h1"}>Add Product Information</Typography>
           <form onSubmit={handleSubmit(addProductFormSubmitHandler)}>
-            <FormLabel>Title</FormLabel>
-            <TextField {...register("productTitle")} ></TextField>
-            <FormLabel>Price</FormLabel>
-            <TextField {...register("productPrice")}></TextField>
-            <FormLabel>Product Description</FormLabel>
-            <TextField {...register("productDescription")}></TextField>
-            <input type={'file'} {...register("productImage")} accept={"image/*"}></input>
-            <Button type={"submit"}>Submit</Button>
+            <FormRowContainer>
+              <FormLabel>Title</FormLabel>
+              <Controller
+                control={control}
+                name="productTitle"
+                render={({field, fieldState}) => (
+                  <StyledTextField
+                    name={field.name}
+                    value={field.value}
+                    error={fieldState.invalid}
+                    helperText={fieldState.invalid ? fieldState.error?.message : ''}
+                    onChange={field.onChange} inputRef={field.ref} onBlur={field.onBlur}
+                  ></StyledTextField>
+                )}
+              />
+            </FormRowContainer>
+            <FormRowContainer>
+              <FormLabel>Price</FormLabel>
+              <Controller control={control} name={"productPrice"} render={({field, fieldState}) => (
+                <StyledTextField onChange={(e) => {
+                  field.onChange(parseInt(e.target.value))
+                }}
+                                 onBlur={field.onBlur}
+                                 value={field.value}
+                                 name={field.name}
+                                 error={fieldState.invalid}
+                                 inputRef={field.ref}
+                                 helperText={fieldState.invalid ? fieldState.error?.message : ''}
+                                 type={"number"}
+                ></StyledTextField>
+              )}></Controller>
+            </FormRowContainer>
+            <FormRowContainer>
+              <FormLabel>Product Description</FormLabel>
+              <Controller control={control} name={"productDescription"}
+                          render={({field, fieldState}) => (
+                            <StyledTextField
+                              sx={{marginBottom: "30px"}}
+                              onChange={field.onChange}
+                              onBlur={field.onBlur}
+                              value={field.value}
+                              name={field.name}
+                              inputRef={field.ref}
+                              error={fieldState.invalid}
+                              helperText={fieldState.invalid ? fieldState.error?.message : ''}
+                              multiline={true}
+                              rows={5}
+                            ></StyledTextField>
+                          )}/>
+            </FormRowContainer>
+            <FormRowContainer>
+              <Controller name={"productImage"} control={control} render={({field, fieldState}) => {
+                return (<FilePickerWrapper>
+                  <CustomFilePickerLabel htmlFor="imagePicker">Upload File</CustomFilePickerLabel>
+                  <CustomFilePicker id="imagePicker" inputRef={field.ref}
+                                    onChange={(e) => {
+                                      field.onChange((e.target as HTMLInputElement).files?.[0])
+                                    }}
+                                    value={field.value === "" ? field.value : undefined}
+                                    name={field.name}
+                                    error={fieldState.invalid}
+                                    helperText={fieldState.invalid ? fieldState.error?.message : ''}
+                                    onBlur={field.onBlur} type={'file'}
+                  ></CustomFilePicker>
+                </FilePickerWrapper>)
+              }}/>
+            </FormRowContainer>
+            <Center>
+              <Button sx={{
+                fontSize: "14px",
+                backgroundColor: "#5783ab",
+                color: 'white',
+                fontWeight: "700",
+                paddingInline: "50px",
+                letterSpacing: "1px"
+              }}
+                      type={"submit"}>Submit</Button>
+            </Center>
           </form>
-        </Paper>
-      </Container>
-    </MyBox>
+        </Center>
+      </Paper>
+    </CenterHorizontallyAndVertically>
   );
 };
 

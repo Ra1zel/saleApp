@@ -27,6 +27,20 @@ const productsSlice = createSlice({
       state.products = state.products.filter(product => {
         return product.id !== idOfElementToDelete
       })
+    },
+    addProduct: (state, action: PayloadAction<Product>) => {
+      const newProduct: Product = {
+        id: Math.round(Math.random()), // change this later only temporary, so it doesn't error out.
+        title: action.payload.title,
+        price: action.payload.price,
+        description: action.payload.description,
+        imageURL: action.payload.imageURL, //should I store URL or actual Image?
+        rating: {
+          rate: action.payload.rating.rate,
+          count: action.payload.rating.count
+        }
+      }
+      state.products.push(newProduct)
     }
   },
   extraReducers: (builder) => {

@@ -8,7 +8,7 @@ export const theme = createTheme({
         root: {
           ".MuiOutlinedInput-root": {
             borderTopRightRadius: "0",
-            borderBottomRightRadius: "0"
+            borderBottomRightRadius: "0",
           }
         }
       }

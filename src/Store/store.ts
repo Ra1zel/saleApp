@@ -1,12 +1,14 @@
 import {configureStore} from '@reduxjs/toolkit'
 import productsReducer from "./ProductsSlice.ts";
 import searchReducer from "./SearchSlice.ts"
+import cartReducer from "./CartSlice.ts"
 import {useDispatch} from "react-redux";
 
 const store = configureStore({
   reducer: {
     productsReducer: productsReducer,
-    searchReducer: searchReducer
+    searchReducer: searchReducer,
+    cartReducer: cartReducer
   }
 })
 export type  RootState = ReturnType<typeof store.getState>
