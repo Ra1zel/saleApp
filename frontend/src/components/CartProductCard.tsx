@@ -24,6 +24,7 @@ const CartProductContainer = styled(Paper)`
   width: 350px;
   display: flex;
   padding: 15px;
+  margin-top: 15px;
   margin-bottom: 15px;
 
 `
@@ -66,7 +67,7 @@ const CartProductCard: React.FC<CartItem> = ({quantity, product: {id, imageURL, 
       <div style={{display: "flex", flexDirection: "column", flexGrow: '1'}}>
         <div style={{marginLeft: "20px", marginBottom: "10px"}}>
           <Typography>{title}</Typography>
-          <Typography sx={{color: "gray", fontSize: "16px"}}>$ {price}</Typography>
+          <Typography sx={{color: "gray", fontSize: "16px"}}>$ {price * quantity}</Typography>
         </div>
         <QuantityRowContainer>
           <Container>

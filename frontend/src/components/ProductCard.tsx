@@ -3,12 +3,12 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import * as React from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {AppDispatch, RootState} from "../Store/store.ts";
 import {deleteProduct} from "../Store/ProductsSlice.ts";
 import {addProductToCart, CartItem} from "../Store/CartSlice.ts";
 import MuiAlert, {AlertProps} from "@mui/material/Alert";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Snackbar from "@mui/material/Snackbar"
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -34,7 +34,6 @@ export const getQuantityOfCartProduct = (productId: number | string) => {
 
 const ProductCard: React.FC<Product> = ({id, imageURL, title, price}) => {
   const dispatch: AppDispatch = useDispatch()
-  const quantityOfProduct = useSelector(getQuantityOfCartProduct(id))
   const [open, setOpen] = useState(false)
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {

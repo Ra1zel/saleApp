@@ -62,8 +62,9 @@ const CartSlice = createSlice({
       const productId = action.payload
       const currentCartItems = state.cartItems
       const indexOfProductInCart = getIndexOfRequiredProduct(currentCartItems, productId)
-      if (state.cartItems[indexOfProductInCart].quantity === 0) {
+      if (state.cartItems[indexOfProductInCart].quantity === 1) {
         //pass
+        state.cartItems.splice(indexOfProductInCart, 1)
       } else {
         state.cartItems[indexOfProductInCart].quantity -= 1
       }
