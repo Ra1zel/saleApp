@@ -1,49 +1,17 @@
-import Paper from "@mui/material/Paper";
 import {FormLabel} from "@mui/material";
 import {styled} from "@mui/material/styles"
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {z} from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import Typography from "@mui/material/Typography";
+import {
+  StyledTextField,
+  StyledFormButton,
+  FormRowContainer,
+  CenterWithinForm, CustomFormPaper, CenterFormOnScreen
+} from "../components/Forms/CommonFormComponents.tsx";
 
-
-const CenterHorizontallyAndVertically = styled('div')`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  margin-top: -80px;
-`
-const Center = styled('div')`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`
-const StyledTextField = styled(TextField)`
-  & .MuiInputBase-input {
-    font-size: 14px;
-    padding: 8px;
-    width: 350px;
-  }
-
-  & .MuiInputBase-root {
-    padding: 0;
-  }
-
-  && {
-    margin-bottom: 0;
-  }
-`
-const FormRowContainer = styled('div')`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-top: 10px;
-`
 const CustomFilePicker = styled(TextField)`
   & .MuiInputBase-input {
     font-size: 14px;
@@ -56,7 +24,6 @@ const CustomFilePicker = styled(TextField)`
     margin: 0;
   }
 
-  //position: absolute;
   left: -100px;
   z-index: 1;
 `
@@ -82,11 +49,6 @@ const FilePickerWrapper = styled('div')`
   position: relative;
   margin-bottom: 25px;
   border: 1px solid transparent;
-
-  //:hover {
-  //  border: 1px solid rgba(0, 0, 0, .97);
-  //  border-right: none;
-  //}
 `
 
 
@@ -143,9 +105,9 @@ const AddProductPage = () => {
     reset({productTitle: "", productPrice: "", productDescription: "", productImage: ""})
   }
   return (
-    <CenterHorizontallyAndVertically>
-      <Paper sx={{display: "flex", flexDirection: "column", width: "450px", padding: "15px"}}>
-        <Center>
+    <CenterFormOnScreen>
+      <CustomFormPaper>
+        <CenterWithinForm>
           <Typography variant={"h1"}>Add Product Information</Typography>
           <form onSubmit={handleSubmit(addProductFormSubmitHandler)}>
             <FormRowContainer>
@@ -215,21 +177,13 @@ const AddProductPage = () => {
                 </FilePickerWrapper>)
               }}/>
             </FormRowContainer>
-            <Center>
-              <Button sx={{
-                fontSize: "14px",
-                backgroundColor: "#5783ab",
-                color: 'white',
-                fontWeight: "700",
-                paddingInline: "50px",
-                letterSpacing: "1px"
-              }}
-                      type={"submit"}>Submit</Button>
-            </Center>
+            <CenterWithinForm>
+              <StyledFormButton type={"submit"}>Submit</StyledFormButton>
+            </CenterWithinForm>
           </form>
-        </Center>
-      </Paper>
-    </CenterHorizontallyAndVertically>
+        </CenterWithinForm>
+      </CustomFormPaper>
+    </CenterFormOnScreen>
   );
 };
 

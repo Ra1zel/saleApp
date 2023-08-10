@@ -7,13 +7,17 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import ProductPage from "./routes/ProductsPage.tsx"
 import AddProductPage from "./routes/AddProductPage.tsx";
 import LoginPage from "./routes/LoginPage.tsx";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 
 const router = createBrowserRouter([{
   path: "/",
   element: (
-    <Provider store={store}>
-      <App/>
-    </Provider>),
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Provider store={store}>
+        <App/>
+      </Provider>
+    </LocalizationProvider>),
   children: [
     {
       path: "",
