@@ -14,6 +14,7 @@ import {CartItem, toggleIsCartShown} from "../Store/CartSlice.ts";
 import {useSelector} from "react-redux";
 import {styled} from "@mui/material/styles";
 import CartProductCard from "./CartProductCard.tsx";
+import {logoutUser} from "../Store/AuthSlice.ts";
 
 const Container = styled('div')`
   display: flex;
@@ -114,6 +115,10 @@ export default function NavigationBar() {
   const dispatch: AppDispatch = useAppDispatch()
   const isCartShown = useSelector((state: RootState) => state.cartReducer.isCartShown)
   const cartProducts = useSelector((state: RootState) => state.cartReducer.cartItems)
+  const isUserLoggedIn = useSelector((state: RootState) => state.authReducer.isUserLoggedIn)
+  const logoutHandler = () => {
+    dispatch(logoutUser())
+  }
   return (
     <Box sx={{flexGrow: 1}}>
       <AppBar position="static">
@@ -137,11 +142,16 @@ export default function NavigationBar() {
           <NavBarButton sx={{}}>
             <Link to={'/addProduct'} style={{textDecoration: 'none', color: "inherit"}}>Add Product</Link>
           </NavBarButton>
-          <NavBarButton color="inherit" sx={{flexGrow: 0}}>
-            <Link to={'/loginPage'} style={{textDecoration: 'none', color: "inherit"}}>
-              Login
-            </Link>
-          </NavBarButton>
+          {
+            isUserLoggedIn ? <NavBarButton onClick={logoutHandler}>Log out</NavBarButton> : (
+              <NavBarButton color="inherit" sx={{flexGrow: 0}}>
+                <Link to={'/loginPage'} style={{textDecoration: 'none', color: "inherit"}}>
+                  Login
+                </Link>
+              </NavBarButton>
+            )
+          }
+
           <Drawer sx={{}} anchor={"right"} open={isCartShown}
                   variant={"temporary"}
                   onClose={() => dispatch(toggleIsCartShown(false))}>{list("right", cartProducts)}</Drawer>
@@ -152,24 +162,4 @@ export default function NavigationBar() {
     </Box>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

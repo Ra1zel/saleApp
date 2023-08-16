@@ -2,10 +2,12 @@ import {configureStore} from '@reduxjs/toolkit'
 import productsReducer from "./ProductsSlice.ts";
 import searchReducer from "./SearchSlice.ts"
 import cartReducer from "./CartSlice.ts"
+import authReducer from "./AuthSlice.ts"
 import {useDispatch} from "react-redux";
 
 const store = configureStore({
   reducer: {
+    authReducer: authReducer,
     productsReducer: productsReducer,
     searchReducer: searchReducer,
     cartReducer: cartReducer

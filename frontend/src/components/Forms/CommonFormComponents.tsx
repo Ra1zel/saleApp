@@ -68,3 +68,79 @@ export const CenterFormOnScreen = styled('div')`
   height: 100vh;
   margin-top: -80px;
 `
+
+export const CustomFilePicker = styled(TextField)`
+  & .MuiInputBase-input {
+    font-size: 14px;
+    padding: 8px;
+    width: 245px;
+    border: 1px solid rgba(0, 0, 0, 0);
+  }
+
+  && {
+    margin: 0;
+  }
+
+  left: -100px;
+  z-index: 1;
+`
+export const CustomFilePickerLabel = styled('label')`
+  margin-top: 4.5px;
+  margin-left: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.19);
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  z-index: 2;
+  background-color: white;
+  padding: 8px 10px 5px 10px;
+`
+export const FilePickerWrapper = styled('div')`
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  margin-bottom: 25px;
+  border: 1px solid transparent;
+`
+export const CustomFilePickerVariantTwo = styled(TextField)`
+  & .MuiInputBase-input {
+    font-size: 14px;
+    padding: 0;
+    height: 5px;
+    width: 15px;
+    border: 1px solid rgba(0, 0, 0, 0);
+  }
+
+  && {
+    margin: 0;
+    visibility: hidden;
+    position: absolute;
+  }
+
+  z-index: 1;
+`
+export const CustomFilePickerLabelVariantTwo = styled('label')`
+  margin-top: 4.5px;
+  border: 1px solid rgba(0, 0, 0, 0.19);
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  font-family: "Quicksand", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 2;
+  background-color: #5783ab;
+  color: white;
+  border-radius: 4px;
+  padding: 8px 10px 5px 10px;
+
+  :hover {
+    background-color: #3e5678;
+    cursor: pointer;
+  }
+`

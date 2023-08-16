@@ -1,6 +1,4 @@
 import {FormLabel} from "@mui/material";
-import {styled} from "@mui/material/styles"
-import TextField from "@mui/material/TextField";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {z} from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -11,45 +9,7 @@ import {
   FormRowContainer,
   CenterWithinForm, CustomFormPaper, CenterFormOnScreen
 } from "../components/Forms/CommonFormComponents.tsx";
-
-const CustomFilePicker = styled(TextField)`
-  & .MuiInputBase-input {
-    font-size: 14px;
-    padding: 8px;
-    width: 245px;
-    border: 1px solid rgba(0, 0, 0, 0);
-  }
-
-  && {
-    margin: 0;
-  }
-
-  left: -100px;
-  z-index: 1;
-`
-const CustomFilePickerLabel = styled('label')`
-  margin-top: 4.5px;
-  margin-left: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.19);
-  border-top: none;
-  border-bottom: none;
-  border-left: none;
-  font-family: "Quicksand", sans-serif;
-  font-weight: 500;
-  font-size: 14px;
-  z-index: 2;
-  background-color: white;
-  padding: 8px 10px 5px 10px;
-`
-const FilePickerWrapper = styled('div')`
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  position: relative;
-  margin-bottom: 25px;
-  border: 1px solid transparent;
-`
+import {CustomFilePicker, CustomFilePickerLabel, FilePickerWrapper} from "../components/Forms/CommonFormComponents.tsx";
 
 
 const addProductFields = z.object({
@@ -105,7 +65,7 @@ const AddProductPage = () => {
     reset({productTitle: "", productPrice: "", productDescription: "", productImage: ""})
   }
   return (
-    <CenterFormOnScreen>
+    <CenterFormOnScreen style={{marginTop: "25px"}}>
       <CustomFormPaper>
         <CenterWithinForm>
           <Typography variant={"h1"}>Add Product Information</Typography>
@@ -139,6 +99,7 @@ const AddProductPage = () => {
                                  inputRef={field.ref}
                                  helperText={fieldState.invalid ? fieldState.error?.message : ''}
                                  type={"number"}
+
                 ></StyledTextField>
               )}></Controller>
             </FormRowContainer>
